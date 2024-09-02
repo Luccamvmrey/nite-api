@@ -1,5 +1,4 @@
 import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
-import {Col} from "sequelize/types/utils";
 import User from "../general/User";
 
 interface ScheduleAttributes {
