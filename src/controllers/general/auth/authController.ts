@@ -35,8 +35,44 @@ const login = async (req: Request, res: Response) => {
         }
         const updatedUser = await UserDb.updateUser(user.userId, updatedFields);
 
-        
+        return res.status(200).json(updatedUser).end();
     } catch (error) {
         return res.status(400).json({error: error.message});
     }
+}
+
+const signup = async (req: Request, res: Response) => {
+    try {
+        const {
+            username,
+            email,
+            password,
+        } = req.body;
+
+        const existingUser = await UserDb.getUserByEmail(email);
+        if (existingUser) {
+            return res.status(400).json({
+                error: "Usuário já cadastrado."
+            });
+        }
+
+        const salt = random();
+        const hashedPassword = authentication(salt, password);
+        const newUser = await UserDb.createUser(
+            username,
+            email,
+            hashedPassword,
+            salt,
+        );
+        console.log(newUser);
+
+        return res.status(200).json(newUser).end();
+    } catch (error) {
+        return res.status(400).json({error: error.message});
+    }
+}
+
+export {
+    login,
+    signup,
 }

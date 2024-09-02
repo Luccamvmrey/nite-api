@@ -1,6 +1,6 @@
 import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
 import {Col} from "sequelize/types/utils";
-import User from "./User";
+import User from "../general/User";
 
 interface ScheduleAttributes {
     userId: string;
@@ -15,6 +15,7 @@ interface ScheduleAttributes {
     timestamps: false,
 })
 export default class Schedule extends Model<ScheduleAttributes> {
+    // Attributes
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
@@ -39,6 +40,7 @@ export default class Schedule extends Model<ScheduleAttributes> {
     })
     declare userId: string;
 
+    // Relationships
     @BelongsTo(() => User)
     declare user: User;
 }

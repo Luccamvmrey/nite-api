@@ -1,9 +1,12 @@
-import express from "express";
+import express, {Request, Response} from "express";
 import http from "http";
 import bodyParser from "body-parser";
 import compression from "compression";
 import cors from "cors";
 import logger from "morgan";
+
+import {startDatabase} from "./config/dbConnection";
+import routes from "./routes";
 
 const app = express();
 
@@ -12,9 +15,13 @@ app.use(cors({credentials: true}));
 app.use(compression());
 app.use(bodyParser.json());
 
+app.use("/", routes());
+
+startDatabase();
+
 const server = http.createServer(app);
 
-server.listen(8080, () => {
-    console.log("Server is running on port 8080");
-    console.log("http://localhost:8080/")
+server.listen(3000, () => {
+    console.log("Server is running on port 3000");
+    console.log("http://localhost:3000")
 })

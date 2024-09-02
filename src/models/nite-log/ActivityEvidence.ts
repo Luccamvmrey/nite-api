@@ -12,6 +12,7 @@ interface ActivityEvidenceAttributes {
     timestamps: false
 })
 export default class ActivityEvidence extends Model<ActivityEvidenceAttributes>{
+    // Attributes
     @Column({
         primaryKey: true,
         autoIncrement: true,
@@ -28,6 +29,7 @@ export default class ActivityEvidence extends Model<ActivityEvidenceAttributes>{
     @Column
     declare activityId: number;
 
+    // Relationships
     @BelongsTo(() => Activity)
     declare activity: Activity;
 }

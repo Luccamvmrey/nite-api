@@ -13,6 +13,7 @@ interface HierarchyAttributes {
     timestamps: false,
 })
 export default class Hierarchy extends Model<HierarchyAttributes> {
+    // Attributes
     @Column({
         primaryKey: true,
         type: DataType.INTEGER,
@@ -32,6 +33,7 @@ export default class Hierarchy extends Model<HierarchyAttributes> {
     })
     declare level: number;
 
+    // Relationships
     @HasMany(() => User)
     declare users: User[];
 }

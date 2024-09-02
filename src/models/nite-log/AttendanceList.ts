@@ -1,6 +1,6 @@
 import {Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
 import Meeting from "./Meeting";
-import User from "./User";
+import User from "../general/User";
 
 interface AttendanceListAttributes {
     meetingId: string;

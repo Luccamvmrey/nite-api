@@ -1,5 +1,5 @@
 import {BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
-import User from "./User";
+import User from "../general/User";
 import ActivityEvidence from "./ActivityEvidence";
 
 interface ActivityAttributes {
@@ -17,6 +17,7 @@ interface ActivityAttributes {
     timestamps: false
 })
 export default class Activity extends Model<ActivityAttributes> {
+    // Attributes
     @Column({
         primaryKey: true,
         autoIncrement: true,
@@ -60,6 +61,7 @@ export default class Activity extends Model<ActivityAttributes> {
     })
     declare userId: string;
 
+    // Relationships
     @BelongsTo(() => User)
     declare user: User;
 

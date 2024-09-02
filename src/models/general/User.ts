@@ -1,13 +1,14 @@
 import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import Hierarchy from "./Hierarchy";
-import Meeting from "./Meeting";
-import AttendanceList from "./AttendanceList";
-import Schedule from "./Schedule";
-import Activity from "./Activity";
+import Meeting from "../nite-log/Meeting";
+import AttendanceList from "../nite-log/AttendanceList";
+import Schedule from "../nite-log/Schedule";
+import Activity from "../nite-log/Activity";
+import {Optional} from "sequelize";
 
-interface UserAttributes {
-    userId: string;
-    hierarchy: Hierarchy
+export interface UserAttributes {
+    userId: number;
+    hierarchyId: number
     username: string;
     email: string;
     hashedPassword: string;
@@ -15,12 +16,16 @@ interface UserAttributes {
     sessionToken: string;
 }
 
+interface UserCreationAttributes extends Optional<UserAttributes, "userId"> {
+}
+
 @Table({
     tableName: "user",
     modelName: "User",
     timestamps: false,
 })
-export default class User extends Model<UserAttributes> {
+export default class User extends Model<UserAttributes, UserCreationAttributes> {
+    // Attributes
     @Column({
         primaryKey: true,
         type: DataType.UUID,
@@ -60,6 +65,7 @@ export default class User extends Model<UserAttributes> {
     @ForeignKey(() => Hierarchy)
     declare hierarchyId: number;
 
+    // Relationships
     @BelongsTo(() => Hierarchy)
     declare hierarchy: Hierarchy;
 

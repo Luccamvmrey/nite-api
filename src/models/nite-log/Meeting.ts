@@ -1,5 +1,5 @@
 import {BelongsToMany, Column, DataType, HasMany, Model, Table} from "sequelize-typescript";
-import User from "./User";
+import User from "../general/User";
 import AttendanceList from "./AttendanceList";
 
 
@@ -15,6 +15,7 @@ interface MeetingAttributes {
     timestamps: false,
 })
 export default class Meeting extends Model<MeetingAttributes> {
+    // Attributes
     @Column({
         primaryKey: true,
         autoIncrement: true,
@@ -33,6 +34,7 @@ export default class Meeting extends Model<MeetingAttributes> {
     })
     declare date: Date;
 
+    // Relationships
     @BelongsToMany(() => User, () => AttendanceList)
     declare users: User[];
 }
