@@ -1,5 +1,4 @@
 import express from "express";
-import http from "http";
 import bodyParser from "body-parser";
 import compression from "compression";
 import cors from "cors";
@@ -19,9 +18,7 @@ app.use("/", routes());
 
 startDatabase();
 
-const server = http.createServer(app);
-
-server.listen(3000, () => {
+app.listen(3000, () => {
     console.log("Server is running on port 3000");
     console.log("http://localhost:3000")
 })
