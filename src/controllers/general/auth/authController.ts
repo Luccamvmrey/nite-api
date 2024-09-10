@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import UserDb from "../../../database/general/user/UserDb";
 import {authentication, random} from "../../../helper/authHelpers";
+import UserModel from "../../../models-prisma/general/UserDb";
 
 const login = async (req: Request, res: Response) => {
     try {
@@ -15,7 +15,7 @@ const login = async (req: Request, res: Response) => {
             });
         }
 
-        const user = await UserDb.getUserByEmail(email);
+        const user = await UserModel.getUserByEmail(email);
         if (!user) {
             return res.status(404).json({
                 error: "Usuário não encontrado."
@@ -33,7 +33,7 @@ const login = async (req: Request, res: Response) => {
         const updatedFields = {
             sessionToken: authentication(salt, user.email),
         }
-        const updatedUser = await UserDb.updateUser(user.userId, updatedFields);
+        const updatedUser = await UserModel.updateUser(user.userId, updatedFields);
 
         return res.status(200).json(updatedUser).end();
     } catch (error) {
@@ -49,7 +49,7 @@ const signup = async (req: Request, res: Response) => {
             password,
         } = req.body;
 
-        const existingUser = await UserDb.getUserByEmail(email);
+        const existingUser = await UserModel.getUserByEmail(email);
         if (existingUser) {
             return res.status(400).json({
                 error: "Usuário já cadastrado."
@@ -58,13 +58,12 @@ const signup = async (req: Request, res: Response) => {
 
         const salt = random();
         const hashedPassword = authentication(salt, password);
-        const newUser = await UserDb.createUser(
+        const newUser = await UserModel.createUser(
             username,
             email,
             hashedPassword,
             salt,
         );
-        console.log(newUser);
 
         return res.status(200).json(newUser).end();
     } catch (error) {

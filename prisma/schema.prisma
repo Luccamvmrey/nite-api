@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["debian-openssl-1.1.x"]
+}
+
+
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// If you ever change any of the schemas, don't forget to run `npx prisma generate` to update the Prisma Client
+
+// Alphabetically ordered!
+model Activity {
+  id             Int                @id @default(autoincrement())
+  deadline       DateTime
+  task           String
+  activityStatus Boolean
+  rating         Int
+  observation    String
+  createdAt      DateTime           @default(now())
+  user           User               @relation(fields: [userId], references: [id])
+  userId         Int
+  evidence       ActivityEvidence[]
+}
+
+model ActivityEvidence {
+  id          Int      @id @default(autoincrement())
+  evidenceUri String
+  activity    Activity @relation(fields: [activityId], references: [id])
+  activityId  Int
+}
+
+model AttendanceList {
+  id        Int     @id @default(autoincrement())
+  meeting   Meeting @relation(fields: [meetingId], references: [id])
+  meetingId Int
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+}
+
+model Hierarchy {
+  id    Int    @id @default(autoincrement())
+  name  String
+  level Int
+
+  users User[]
+}
+
+model Meeting {
+  id             Int              @id @default(autoincrement())
+  meetingCode    String
+  date           DateTime
+  attendanceList AttendanceList[]
+}
+
+model Schedule {
+  id        Int    @id @default(autoincrement())
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+  dayOfWeek Int
+  startTime String
+  endTime   String
+}
+
+model User {
+  id             Int              @id @default(autoincrement())
+  username       String
+  email          String
+  salt           String
+  hashedPassword String
+  sessionToken   String?
+  hierarchy      Hierarchy        @relation(fields: [hierarchyId], references: [id])
+  hierarchyId    Int
+  activities     Activity[]
+  attendanceList AttendanceList[]
+  schedule       Schedule[]
+}

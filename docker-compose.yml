@@ -12,6 +12,7 @@ services:
       - db
 
   db:
+    hostname: mysql-nite
     image: mysql:8.0
     restart: always
     environment:
