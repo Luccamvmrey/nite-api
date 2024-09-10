@@ -1,6 +1,7 @@
 import {Router} from "express";
 
 // General Routes
+import helloRoute from "./general/helloRoute";
 // User/Auth
 import authRoutes from "./general/auth/authRoutes";
 import userRoutes from "./general/user/userRoutes";
@@ -13,6 +14,7 @@ import scheduleRoutes from "./nite-log/scheduleRoutes";
 const router = Router();
 
 export default (): Router => {
+    helloRoute(router);
     authRoutes(router);
     userRoutes(router);
     hierarchyRoutes(router);
