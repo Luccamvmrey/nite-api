@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {authentication, random} from "../../../helper/authHelpers";
-import UserModel from "../../../models-prisma/general/UserDb";
+import UserModel from "../../../models-prisma/general/UserModel";
 
 const login = async (req: Request, res: Response) => {
     try {
@@ -33,7 +33,7 @@ const login = async (req: Request, res: Response) => {
         const updatedFields = {
             sessionToken: authentication(salt, user.email),
         }
-        const updatedUser = await UserModel.updateUser(user.userId, updatedFields);
+        const updatedUser = await UserModel.updateUser(user.id, updatedFields);
 
         return res.status(200).json(updatedUser).end();
     } catch (error) {

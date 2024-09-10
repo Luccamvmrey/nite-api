@@ -22,25 +22,20 @@ export default class UserModel {
     }
 
     static async getUserById(userId: number): Promise<any | null> {
-        await User.findUnique({
+        return User.findUnique({
             where: {
                 id: userId,
             },
+            include: {
+                schedule: true,
+            }
         });
     }
 
     static async getUserByEmail(email: string): Promise<any | null | undefined> {
-        await User.findFirst({
+        return User.findFirst({
             where: {
                 email: email,
-            },
-        });
-    }
-
-    static async getUserByUsername(username: string): Promise<any | null> {
-        await User.findFirst({
-            where: {
-                username: username,
             },
         });
     }
@@ -63,7 +58,7 @@ export default class UserModel {
             where: {
                 id: userId,
             },
-            data: fields,
+            data: {...fields},
         });
         return user;
     }
