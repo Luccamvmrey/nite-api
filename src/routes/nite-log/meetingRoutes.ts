@@ -11,6 +11,6 @@ export default (router: Router) => {
     router.get("meetings/:id", getMeetingById);
     router.get("/meetings/by-date/:date", getMeetingWithUserAttendance);
     router.put("/meetings/:id", updateMeeting);
-    router.put("meetings/:id/update-code", updateMeetingCode);
+    router.put("meetings/:date/update-code", updateMeetingCode);
     router.delete("/meetings/:id", deleteMeeting);
 }

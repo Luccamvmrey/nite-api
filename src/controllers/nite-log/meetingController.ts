@@ -77,12 +77,14 @@ const updateMeeting = async (req: Request, res: Response) => {
 
 const updateMeetingCode = async (req: Request, res: Response) => {
     try {
-        const meetingId = parseInt(req.params.id);
+        const date = new Date(req.params.date);
+
+        const meeting = await MeetingModel.getMeetingByDate(date);
 
         const updatedMeeting = {
             meetingCode: createRandomMeetingCode()
         }
-        await MeetingModel.updateMeeting(meetingId, updatedMeeting);
+        await MeetingModel.updateMeeting(meeting.id, updatedMeeting);
 
         res.status(200).json({newMeetingCode: updatedMeeting.meetingCode}).end();
     } catch (error) {
