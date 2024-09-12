@@ -1,15 +1,16 @@
 import {Router} from "express";
 import {
     createMeeting, deleteMeeting,
-    getMeetingByDate,
+    getMeetingWithUserAttendance,
     getMeetingById,
-    updateMeeting
+    updateMeeting, updateMeetingCode
 } from "../../controllers/nite-log/meetingController";
 
 export default (router: Router) => {
     router.post("/meetings", createMeeting);
     router.get("meetings/:id", getMeetingById);
-    router.get("/meetings/by-date/:date", getMeetingByDate);
+    router.get("/meetings/by-date/:date", getMeetingWithUserAttendance);
     router.put("/meetings/:id", updateMeeting);
+    router.put("meetings/:id/update-code", updateMeetingCode);
     router.delete("/meetings/:id", deleteMeeting);
 }

@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {authentication, random} from "../../../helper/authHelpers";
+import {authentication, random} from "../../../helper/helpers";
 import UserModel from "../../../models-prisma/general/UserModel";
 
 const login = async (req: Request, res: Response) => {

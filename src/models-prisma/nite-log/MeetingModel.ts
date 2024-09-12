@@ -1,30 +1,60 @@
 import {PrismaClient} from '@prisma/client';
+import {createRandomMeetingCode} from "../../helper/helpers";
 
 const prisma = new PrismaClient();
 const Meeting = prisma.meeting;
 
 export default class MeetingModel {
-    static async createMeeting(meeting: any) {
-        // Implement createMeeting
+    static async createMeeting(date: Date) {
+        return Meeting.create({
+            data: {
+                meetingCode: createRandomMeetingCode(),
+                date: date
+            }
+        })
     }
 
     static async getMeetingById(id: number) {
-        // Implement getMeetingById
+        return Meeting.findUnique({
+            where: {
+                id: id
+            }
+        })
     }
 
     static async getMeetingByDate(date: Date) {
-        // Implement getMeetingByDate
+        return Meeting.findFirst({
+            where: {
+                date: date
+            }
+        })
     }
 
     static async getMeetingWithUserAttendance(date: Date) {
-        // Implement getMeetingWithUserAttendance
+        return Meeting.findFirst({
+            where: {
+                date: date
+            },
+            include: {
+                attendanceList: true
+            }
+        })
     }
 
     static async updateMeeting(id: number, meetingFields: {}) {
-        // Implement updateMeeting
+        await Meeting.update({
+            where: {
+                id: id
+            },
+            data: meetingFields
+        })
     }
 
     static async deleteMeeting(id: number) {
-        // Implement deleteMeeting
+        await Meeting.delete({
+            where: {
+                id: id
+            }
+        })
     }
 }
