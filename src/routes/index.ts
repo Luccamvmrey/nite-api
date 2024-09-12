@@ -1,14 +1,14 @@
 import {Router} from "express";
 
-// General Routes
 import helloRoute from "./general/helloRoute";
-// User/Auth
-import authRoutes from "./general/auth/authRoutes";
-import userRoutes from "./general/user/userRoutes";
-// Hierarchy
-import hierarchyRoutes from "./general/hierarchy/hierarchyRoutes";
+
+// General Routes
+import authRoutes from "./general/authRoutes";
+import hierarchyRoutes from "./general/hierarchyRoutes";
+import userRoutes from "./general/userRoutes";
+
 // Nite Log Routes
-// Schedule
+import meetingRoutes from "./nite-log/meetingRoutes";
 import scheduleRoutes from "./nite-log/scheduleRoutes";
 
 const router = Router();
@@ -19,6 +19,7 @@ export default (): Router => {
     userRoutes(router);
     hierarchyRoutes(router);
 
+    meetingRoutes(router);
     scheduleRoutes(router);
 
     return router;
