@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {deleteUser, getUserById, getUsers, updateUser} from "../../../controllers/general/user/userController";
+import {deleteUser, getUserById, getUsers, updateUser} from "../../controllers/general/user/userController";
 
 export default (router: Router) => {
     router.get("/users", getUsers);
