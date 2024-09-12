@@ -11,7 +11,8 @@ const createMeeting = async (req: Request, res: Response) => {
         const meeting = await MeetingModel.getMeetingByDate(date as Date);
         if (meeting) {
             res.status(409).json({
-                error: "Reunião já cadastrada."
+                error: "Reunião já cadastrada.",
+                meeting: meeting
             });
         }
 
