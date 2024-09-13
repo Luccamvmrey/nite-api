@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import UserModel from "../../../models-prisma/general/UserModel";
+import UserModel from "../../models-prisma/general/UserModel";
 
 const getUserById = async (req: Request, res: Response) => {
     try {
@@ -17,7 +17,7 @@ const getUserById = async (req: Request, res: Response) => {
             });
         }
 
-        return res.status(200).json(user).end();
+        return res.status(200).json(user);
     } catch (error) {
         return res.status(500).json({error: error.message});
     }
@@ -26,7 +26,7 @@ const getUserById = async (req: Request, res: Response) => {
 const getUsers = async (_: Request, res: Response) => {
     try {
         const users = await UserModel.getUsers();
-        return res.status(200).json(users).end();
+        return res.status(200).json(users);
     } catch (error) {
         return res.status(500).json({error: error.message});
     }
@@ -43,7 +43,7 @@ const updateUser = async (req: Request, res: Response) => {
 
         const fields = req.body;
         const updatedUser = await UserModel.updateUser(userId, fields);
-        return res.status(200).json(updatedUser).end();
+        return res.status(200).json(updatedUser);
     } catch (error) {
         return res.status(500).json({error: error.message});
     }
@@ -59,7 +59,7 @@ const deleteUser = async (req: Request, res: Response) => {
         }
 
         await UserModel.deleteUser(userId);
-        return res.status(200).end();
+        return res.status(200);
     } catch (error) {
         return res.status(500).json({error: error.message});
     }

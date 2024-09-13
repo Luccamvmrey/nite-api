@@ -15,9 +15,9 @@ const createSchedule = async (req: Request, res: Response) => {
         }
 
         const createdSchedule = await ScheduleModel.createSchedule(userId, schedule);
-        return res.status(201).json(createdSchedule).end();
+        return res.status(201).json(createdSchedule);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 
@@ -32,7 +32,7 @@ const updateSchedule = async (req: Request, res: Response) => {
 
         const fields = req.body;
         const updatedSchedule = await ScheduleModel.updateSchedule(scheduleId, fields);
-        return res.status(200).json(updatedSchedule).end();
+        return res.status(200).json(updatedSchedule);
     } catch (error) {
         return res.status(500).json({error: error.message});
     }
@@ -48,7 +48,7 @@ const deleteSchedule = async (req: Request, res: Response) => {
         }
 
         await ScheduleModel.deleteSchedule(scheduleId);
-        return res.status(204).end();
+        return res.status(204);
     } catch (error) {
         return res.status(500).json({error: error.message});
     }

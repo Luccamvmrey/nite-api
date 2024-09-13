@@ -3,7 +3,7 @@ import {
     createHierarchy, deleteHierarchy,
     getAllHierarchies,
     getHierarchyById, updateHierarchy
-} from "../../controllers/general/hierarchy/hierarchyController";
+} from "../../controllers/general/hierarchyController";
 
 export default (router: Router) => {
     router.post("/hierarchies", createHierarchy);

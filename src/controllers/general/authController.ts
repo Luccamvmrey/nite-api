@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {authentication, random} from "../../../helper/helpers";
-import UserModel from "../../../models-prisma/general/UserModel";
+import {authentication, random} from "../../helper/helpers";
+import UserModel from "../../models-prisma/general/UserModel";
 
 const login = async (req: Request, res: Response) => {
     try {
@@ -35,7 +35,7 @@ const login = async (req: Request, res: Response) => {
         }
         const updatedUser = await UserModel.updateUser(user.id, updatedFields);
 
-        return res.status(200).json(updatedUser).end();
+        return res.status(200).json(updatedUser);
     } catch (error) {
         return res.status(400).json({error: error.message});
     }
@@ -65,7 +65,7 @@ const signup = async (req: Request, res: Response) => {
             salt,
         );
 
-        return res.status(200).json(newUser).end();
+        return res.status(200).json(newUser);
     } catch (error) {
         return res.status(400).json({error: error.message});
     }

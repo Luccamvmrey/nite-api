@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import HierarchyModel from "../../../models-prisma/general/HierarchyModel";
+import HierarchyModel from "../../models-prisma/general/HierarchyModel";
 
 const createHierarchy = async (req: Request, res: Response) => {
     try {
@@ -9,18 +9,18 @@ const createHierarchy = async (req: Request, res: Response) => {
         }
 
         const hierarchy = await HierarchyModel.createHierarchy(name, level);
-        res.status(201).json(hierarchy);
+        return res.status(201).json(hierarchy);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 
 const getAllHierarchies = async (req: Request, res: Response) => {
     try {
         const hierarchies = await HierarchyModel.getAllHierarchies();
-        res.status(200).json(hierarchies);
+        return res.status(200).json(hierarchies);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 
@@ -32,9 +32,9 @@ const getHierarchyById = async (req: Request, res: Response) => {
         }
 
         const hierarchy = await HierarchyModel.getHierarchyById(id);
-        res.status(200).json(hierarchy);
+        return res.status(200).json(hierarchy);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 
@@ -47,9 +47,9 @@ const updateHierarchy = async (req: Request, res: Response) => {
         }
 
         const hierarchy = await HierarchyModel.updateHierarchy(id, fields);
-        res.status(200).json(hierarchy);
+        return res.status(200).json(hierarchy);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 
@@ -61,9 +61,9 @@ const deleteHierarchy = async (req: Request, res: Response) => {
         }
 
         await HierarchyModel.deleteHierarchy(id);
-        res.status(204).send();
+        return res.status(204).send();
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 
