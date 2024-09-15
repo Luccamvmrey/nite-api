@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import MeetingModel from "../../models/nite-log/MeetingModel";
 import {createRandomMeetingCode} from "../../helper/helpers";
+import AttendanceListModel from "../../models/nite-log/AttendanceListModel";
 
 const createMeeting = async (req: Request, res: Response) => {
     try {
@@ -18,6 +19,25 @@ const createMeeting = async (req: Request, res: Response) => {
 
         const newMeeting = await MeetingModel.createMeeting(date as Date);
         return res.status(201).json(newMeeting);
+    } catch (error) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
+const addUserToAttendanceList = async (req: Request, res: Response) => {
+    try {
+        const {
+            userId,
+            date
+        } = req.body;
+
+        const meeting = await MeetingModel.getMeetingByDate(date);
+        if (!meeting) {
+            return res.status(404).json({error: "Reunião não encontrada"});
+        }
+
+        await AttendanceListModel.addUserToAttendanceList(userId, meeting.id);
+        return res.status(200).json({message: "Usuário adicionado à lista de presença"});
     } catch (error) {
         return res.status(500).json({error: error.message});
     }
@@ -98,6 +118,7 @@ export {
     createMeeting,
     getMeetingById,
     getMeetingWithUserAttendance,
+    addUserToAttendanceList,
     updateMeeting,
     updateMeetingCode,
     deleteMeeting
