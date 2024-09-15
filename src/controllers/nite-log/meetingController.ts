@@ -28,12 +28,17 @@ const addUserToAttendanceList = async (req: Request, res: Response) => {
     try {
         const {
             userId,
-            date
+            date,
+            meetingCode
         } = req.body;
 
         const meeting = await MeetingModel.getMeetingByDate(date);
         if (!meeting) {
             return res.status(404).json({error: "Reunião não encontrada"});
+        }
+
+        if (meeting.meetingCode !== meetingCode) {
+            return res.status(403).json({error: "Código de reunião inválido"});
         }
 
         await AttendanceListModel.addUserToAttendanceList(userId, meeting.id);
