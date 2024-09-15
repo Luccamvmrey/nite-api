@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import MeetingModel from "../../models-prisma/nite-log/MeetingModel";
+import MeetingModel from "../../models/nite-log/MeetingModel";
 import {createRandomMeetingCode} from "../../helper/helpers";
 
 const createMeeting = async (req: Request, res: Response) => {

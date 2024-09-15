@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import HierarchyModel from "../../models-prisma/general/HierarchyModel";
+import HierarchyModel from "../../models/general/HierarchyModel";
 
 const createHierarchy = async (req: Request, res: Response) => {
     try {

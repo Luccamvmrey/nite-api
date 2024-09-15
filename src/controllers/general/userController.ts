@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import UserModel from "../../models-prisma/general/UserModel";
+import UserModel from "../../models/general/UserModel";
 
 const getUserById = async (req: Request, res: Response) => {
     try {

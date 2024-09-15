@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import ScheduleModel from "../../models-prisma/nite-log/ScheduleModel";
+import ScheduleModel from "../../models/nite-log/ScheduleModel";
 
 const createSchedule = async (req: Request, res: Response) => {
     try {
