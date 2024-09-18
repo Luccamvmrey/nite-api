@@ -23,6 +23,28 @@ const getUserById = async (req: Request, res: Response) => {
     }
 }
 
+const getUserBySessionToken = async (req: Request, res: Response) => {
+    try {
+        const sessionToken = req.params.sessionToken;
+        if (!sessionToken) {
+            return res.status(400).json({
+                error: "Token inválido."
+            });
+        }
+
+        const user = await UserModel.getUserBySessionToken(sessionToken);
+        if (!user) {
+            return res.status(404).json({
+                error: "Usuário não encontrado."
+            });
+        }
+
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
 const getUsers = async (_: Request, res: Response) => {
     try {
         const users = await UserModel.getUsers();
@@ -67,6 +89,7 @@ const deleteUser = async (req: Request, res: Response) => {
 
 export {
     getUserById,
+    getUserBySessionToken,
     getUsers,
     updateUser,
     deleteUser,
