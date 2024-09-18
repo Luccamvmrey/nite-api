@@ -48,6 +48,25 @@ const addUserToAttendanceList = async (req: Request, res: Response) => {
     }
 }
 
+const finishUserAttendance = async (req: Request, res: Response) => {
+    try {
+        const {
+            userId,
+            date
+        } = req.body;
+
+        const meeting = await MeetingModel.getMeetingByDate(date);
+        if (!meeting) {
+            return res.status(404).json({error: "Reunião não encontrada"});
+        }
+
+        await AttendanceListModel.finishAttendance(userId, meeting.id);
+        return res.status(200).json({message: "Presença finalizada"});
+    } catch (error) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
 const getMeetingById = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
@@ -124,6 +143,7 @@ export {
     getMeetingById,
     getMeetingWithUserAttendance,
     addUserToAttendanceList,
+    finishUserAttendance,
     updateMeeting,
     updateMeetingCode,
     deleteMeeting

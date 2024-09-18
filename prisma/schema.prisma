@@ -34,11 +34,14 @@ model ActivityEvidence {
 }
 
 model AttendanceList {
-  id        Int     @id @default(autoincrement())
   meeting   Meeting @relation(fields: [meetingId], references: [id])
   meetingId Int
   user      User    @relation(fields: [userId], references: [id])
   userId    Int
+  startTime DateTime?
+  endTime   DateTime?
+
+  @@id(name: "id",[meetingId, userId])
 }
 
 model Hierarchy {

@@ -16,7 +16,23 @@ export default class AttendanceListModel {
                     connect: {
                         id: meetingId
                     }
+                },
+                startTime: new Date(),
+                endTime: null
+            }
+        });
+    }
+
+    static async finishAttendance(userId: number, meetingId: number) {
+        return AttendanceList.update({
+            where: {
+                id: {
+                    userId: userId,
+                    meetingId: meetingId
                 }
+            },
+            data: {
+                endTime: new Date()
             }
         });
     }
