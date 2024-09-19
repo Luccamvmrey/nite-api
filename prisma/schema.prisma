@@ -74,7 +74,7 @@ model User {
   email          String
   salt           String
   hashedPassword String
-  sessionToken   String?
+  sessionToken   String?          @unique
   hierarchy      Hierarchy        @relation(fields: [hierarchyId], references: [id])
   hierarchyId    Int
   activities     Activity[]

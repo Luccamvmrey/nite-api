@@ -5,4 +5,3 @@ export default (router: Router) => {
     router.post("/auth/signup", signup);
     router.post("/auth/login", login);
 }
-

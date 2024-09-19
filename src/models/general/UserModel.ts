@@ -53,22 +53,12 @@ export default class UserModel {
     }
 
     static async updateUser(userId: number, fields: {}) {
-        const user = await User.findUnique({
-            where: {
-                id: userId,
-            },
-        });
-        if (!user) {
-            throw new Error("Usuário não encontrado.");
-        }
-
-        await User.update({
+        return  User.update({
             where: {
                 id: userId,
             },
             data: {...fields},
         });
-        return user;
     }
 
     static async deleteUser(userId: number) {

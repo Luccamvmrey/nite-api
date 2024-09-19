@@ -34,6 +34,8 @@ const login = async (req: Request, res: Response) => {
             sessionToken: authentication(salt, user.email),
         }
         const updatedUser = await UserModel.updateUser(user.id, updatedFields);
+        console.log(updatedUser.sessionToken);
+        console.log(updatedFields.sessionToken);
 
         return res.status(200).json(updatedUser);
     } catch (error) {
