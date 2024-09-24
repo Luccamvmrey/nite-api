@@ -9,7 +9,6 @@ import userRoutes from "./general/userRoutes";
 
 // Nite Log Routes
 import meetingRoutes from "./nite-log/meetingRoutes";
-import scheduleRoutes from "./nite-log/scheduleRoutes";
 
 const router = Router();
 
@@ -20,7 +19,6 @@ export default (): Router => {
     hierarchyRoutes(router);
 
     meetingRoutes(router);
-    scheduleRoutes(router);
 
     return router;
 }

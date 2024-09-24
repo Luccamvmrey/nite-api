@@ -34,8 +34,6 @@ const login = async (req: Request, res: Response) => {
             sessionToken: authentication(salt, user.email),
         }
         const updatedUser = await UserModel.updateUser(user.id, updatedFields);
-        console.log(updatedUser.sessionToken);
-        console.log(updatedFields.sessionToken);
 
         return res.status(200).json(updatedUser);
     } catch (error) {
@@ -69,7 +67,7 @@ const signup = async (req: Request, res: Response) => {
 
         return res.status(200).json(newUser);
     } catch (error) {
-        return res.status(400).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 

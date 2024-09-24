@@ -3,11 +3,10 @@ import ScheduleModel from "../../models/nite-log/ScheduleModel";
 
 const createSchedule = async (req: Request, res: Response) => {
     try {
-        const {
-            userId,
-            schedule,
-        } = req.body;
+        const userId = parseInt(req.body.userId);
+        const {schedule} = req.body;
 
+        console.log(userId, schedule);
         if (!userId || !schedule) {
             return res.status(400).json({
                 error: "Parâmetros inválidos."

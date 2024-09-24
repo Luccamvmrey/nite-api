@@ -45,6 +45,9 @@ export default class UserModel {
             where: {
                 sessionToken: sessionToken,
             },
+            include: {
+                schedule: true,
+            }
         });
     }
 

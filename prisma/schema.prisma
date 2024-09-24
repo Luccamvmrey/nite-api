@@ -1,18 +1,13 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["debian-openssl-1.1.x"]
 }
-
-
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-// If you ever change any of the schemas, don't forget to run `npx prisma generate` to update the Prisma Client
-
-// Alphabetically ordered!
 model Activity {
   id             Int                @id @default(autoincrement())
   deadline       DateTime
@@ -21,34 +16,38 @@ model Activity {
   rating         Int
   observation    String
   createdAt      DateTime           @default(now())
-  user           User               @relation(fields: [userId], references: [id])
   userId         Int
+  user           User               @relation(fields: [userId], references: [id])
   evidence       ActivityEvidence[]
+
+  @@index([userId], map: "Activity_userId_fkey")
 }
 
 model ActivityEvidence {
   id          Int      @id @default(autoincrement())
   evidenceUri String
-  activity    Activity @relation(fields: [activityId], references: [id])
   activityId  Int
+  activity    Activity @relation(fields: [activityId], references: [id])
+
+  @@index([activityId], map: "ActivityEvidence_activityId_fkey")
 }
 
 model AttendanceList {
-  meeting   Meeting @relation(fields: [meetingId], references: [id])
   meetingId Int
-  user      User    @relation(fields: [userId], references: [id])
   userId    Int
-  startTime DateTime?
   endTime   DateTime?
+  startTime DateTime?
+  meeting   Meeting   @relation(fields: [meetingId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
-  @@id(name: "id",[meetingId, userId])
+  @@id([meetingId, userId], name: "id")
+  @@index([userId], map: "AttendanceList_userId_fkey")
 }
 
 model Hierarchy {
   id    Int    @id @default(autoincrement())
   name  String
   level Int
-
   users User[]
 }
 
@@ -61,11 +60,13 @@ model Meeting {
 
 model Schedule {
   id        Int    @id @default(autoincrement())
-  user      User   @relation(fields: [userId], references: [id])
   userId    Int
   dayOfWeek Int
   startTime String
   endTime   String
+  user      User   @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "Schedule_userId_fkey")
 }
 
 model User {
@@ -75,9 +76,11 @@ model User {
   salt           String
   hashedPassword String
   sessionToken   String?          @unique
-  hierarchy      Hierarchy        @relation(fields: [hierarchyId], references: [id])
   hierarchyId    Int
   activities     Activity[]
   attendanceList AttendanceList[]
   schedule       Schedule[]
+  hierarchy      Hierarchy        @relation(fields: [hierarchyId], references: [id])
+
+  @@index([hierarchyId], map: "User_hierarchyId_fkey")
 }
