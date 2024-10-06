@@ -3,7 +3,7 @@ import ScheduleModel from "../../models/nite-log/ScheduleModel";
 
 const createSchedule = async (req: Request, res: Response) => {
     try {
-        const userId = parseInt(req.body.userId);
+        const userId = parseInt(req.params.userId);
         const {schedule} = req.body;
 
         console.log(userId, schedule);
