@@ -30,7 +30,7 @@ export default class HierarchyModel {
             where: {
                 id
             },
-            data: {...fields}
+            data: fields
         });
     }
 

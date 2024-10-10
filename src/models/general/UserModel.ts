@@ -60,7 +60,7 @@ export default class UserModel {
             where: {
                 id: userId,
             },
-            data: {...fields},
+            data: fields
         });
     }
 

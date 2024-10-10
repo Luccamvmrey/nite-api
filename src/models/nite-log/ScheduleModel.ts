@@ -28,7 +28,7 @@ export default class ScheduleModel {
             where: {
                 id: scheduleId,
             },
-            data: {...fields},
+            data: fields
         });
     }
 
