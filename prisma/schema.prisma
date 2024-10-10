@@ -35,8 +35,8 @@ model ActivityEvidence {
 model AttendanceList {
   meetingId Int
   userId    Int
-  endTime   DateTime?
-  startTime DateTime?
+  endTime   String?
+  startTime String?
   meeting   Meeting   @relation(fields: [meetingId], references: [id])
   user      User      @relation(fields: [userId], references: [id])
 
@@ -54,7 +54,7 @@ model Hierarchy {
 model Meeting {
   id             Int              @id @default(autoincrement())
   meetingCode    String
-  date           DateTime
+  date           String
   attendanceList AttendanceList[]
 }
 

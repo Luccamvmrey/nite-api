@@ -47,7 +47,7 @@ const deleteSchedule = async (req: Request, res: Response) => {
         }
 
         await ScheduleModel.deleteSchedule(scheduleId);
-        return res.status(204);
+        return res.status(200).send();
     } catch (error) {
         return res.status(500).json({error: error.message});
     }

@@ -1,15 +1,17 @@
 import {PrismaClient} from '@prisma/client';
-import {createRandomMeetingCode} from "../../helper/helpers";
+import {createRandomMeetingCode, formatDate} from "../../helper/helpers";
 
 const prisma = new PrismaClient();
 const Meeting = prisma.meeting;
 
 export default class MeetingModel {
-    static async createMeeting(date: Date) {
+    static async createMeeting(date: string) {
+        const formattedDate = formatDate(date);
+
         return Meeting.create({
             data: {
                 meetingCode: createRandomMeetingCode(),
-                date: date
+                date: formattedDate
             }
         })
     }
@@ -22,18 +24,22 @@ export default class MeetingModel {
         })
     }
 
-    static async getMeetingByDate(date: Date) {
+    static async getMeetingByDate(date: string) {
+        const formattedDate = formatDate(date);
+
         return Meeting.findFirst({
             where: {
-                date: date
+                date: formattedDate
             }
         })
     }
 
-    static async getMeetingWithUserAttendance(date: Date) {
+    static async getMeetingWithUserAttendance(date: string) {
+        const formattedDate = formatDate(date);
+
         return Meeting.findFirst({
             where: {
-                date: date
+                date: formattedDate
             },
             include: {
                 attendanceList: true

@@ -1,10 +1,13 @@
 import {PrismaClient} from '@prisma/client';
+import {formatTime} from "../../helper/helpers";
 
 const prisma = new PrismaClient();
 const AttendanceList = prisma.attendanceList;
 
 export default class AttendanceListModel {
     static async addUserToAttendanceList(userId: number, meetingId: number) {
+        const formattedTime = formatTime();
+
         return AttendanceList.create({
             data: {
                 user: {
@@ -17,13 +20,15 @@ export default class AttendanceListModel {
                         id: meetingId
                     }
                 },
-                startTime: new Date(),
+                startTime: formattedTime,
                 endTime: null
             }
         });
     }
 
     static async finishAttendance(userId: number, meetingId: number) {
+        const formattedTime = formatTime();
+
         return AttendanceList.update({
             where: {
                 id: {
@@ -32,7 +37,7 @@ export default class AttendanceListModel {
                 }
             },
             data: {
-                endTime: new Date()
+                endTime: formattedTime
             }
         });
     }

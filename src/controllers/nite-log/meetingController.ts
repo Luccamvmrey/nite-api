@@ -9,7 +9,7 @@ const createMeeting = async (req: Request, res: Response) => {
             date
         } = req.body;
 
-        const meeting = await MeetingModel.getMeetingByDate(date as Date);
+        const meeting = await MeetingModel.getMeetingByDate(date);
         if (meeting) {
             return res.status(409).json({
                 error: "Reunião já cadastrada.",
@@ -17,7 +17,7 @@ const createMeeting = async (req: Request, res: Response) => {
             });
         }
 
-        const newMeeting = await MeetingModel.createMeeting(date as Date);
+        const newMeeting = await MeetingModel.createMeeting(date);
         return res.status(201).json(newMeeting);
     } catch (error) {
         return res.status(500).json({error: error.message});
@@ -84,7 +84,7 @@ const getMeetingById = async (req: Request, res: Response) => {
 
 const getMeetingWithUserAttendance = async (req: Request, res: Response) => {
     try {
-        const date = new Date(req.params.date);
+        const date = req.params.date;
 
         if (!date) {
             return res.status(400).json({error: "Data não fornecida."});
@@ -113,7 +113,7 @@ const updateMeeting = async (req: Request, res: Response) => {
 
 const updateMeetingCode = async (req: Request, res: Response) => {
     try {
-        const date = new Date(req.params.date);
+        const date = req.params.date;
 
         const meeting = await MeetingModel.getMeetingByDate(date);
 
