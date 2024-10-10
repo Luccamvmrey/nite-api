@@ -37,6 +37,11 @@ const addUserToAttendanceList = async (req: Request, res: Response) => {
             return res.status(404).json({error: "Reunião não encontrada"});
         }
 
+        const attendance = await AttendanceListModel.getSingleAttendance(userId, meeting.id);
+        if (attendance) {
+            return res.status(409).json({error: "Usuário já cadastrado na lista de presença"});
+        }
+
         if (meeting.meetingCode !== meetingCode) {
             return res.status(403).json({error: "Código de reunião inválido"});
         }

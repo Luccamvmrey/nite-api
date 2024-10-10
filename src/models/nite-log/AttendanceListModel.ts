@@ -41,4 +41,15 @@ export default class AttendanceListModel {
             }
         });
     }
+
+    static async getSingleAttendance(userId: number, meetingId: number) {
+        return AttendanceList.findUnique({
+            where: {
+                id: {
+                    userId: userId,
+                    meetingId: meetingId
+                }
+            }
+        });
+    }
 }
