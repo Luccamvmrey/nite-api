@@ -37,8 +37,8 @@ model AttendanceList {
   userId    Int
   endTime   String?
   startTime String?
-  meeting   Meeting   @relation(fields: [meetingId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+  meeting   Meeting @relation(fields: [meetingId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
 
   @@id([meetingId, userId], name: "id")
   @@index([userId], map: "AttendanceList_userId_fkey")
@@ -77,6 +77,7 @@ model User {
   hashedPassword String
   sessionToken   String?          @unique
   hierarchyId    Int
+  isOnAttendance Boolean          @default(false)
   activities     Activity[]
   attendanceList AttendanceList[]
   schedule       Schedule[]

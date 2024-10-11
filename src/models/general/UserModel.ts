@@ -56,7 +56,7 @@ export default class UserModel {
     }
 
     static async updateUser(userId: number, fields: {}) {
-        return  User.update({
+        return User.update({
             where: {
                 id: userId,
             },

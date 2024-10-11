@@ -1,5 +1,6 @@
 import {PrismaClient} from '@prisma/client';
 import {formatTime} from "../../helper/helpers";
+import UserModel from "../general/UserModel";
 
 const prisma = new PrismaClient();
 const AttendanceList = prisma.attendanceList;
@@ -8,6 +9,9 @@ export default class AttendanceListModel {
     static async addUserToAttendanceList(userId: number, meetingId: number) {
         const formattedTime = formatTime();
 
+        await UserModel.updateUser(userId, {
+            isOnAttendance: true,
+        })
         return AttendanceList.create({
             data: {
                 user: {
@@ -29,6 +33,9 @@ export default class AttendanceListModel {
     static async finishAttendance(userId: number, meetingId: number) {
         const formattedTime = formatTime();
 
+        await UserModel.updateUser(userId, {
+            isOnAttendance: false,
+        })
         return AttendanceList.update({
             where: {
                 id: {
