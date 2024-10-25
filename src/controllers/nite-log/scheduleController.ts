@@ -1,22 +1,23 @@
 import {Request, Response} from "express";
-import ScheduleModel from "../../models/nite-log/ScheduleModel";
+import ScheduleModel from "../../models/nite-log/schedule/ScheduleModel";
+import UserService from "../../models/general/UserService";
+
+const userService = new UserService();
 
 const createSchedule = async (req: Request, res: Response) => {
     try {
-        const userId = parseInt(req.params.userId);
+        const {userId} = req.params;
         const {schedule} = req.body;
 
-        console.log(userId, schedule);
         if (!userId || !schedule) {
-            return res.status(400).json({
-                error: "Parâmetros inválidos."
-            });
+            res.status(400).json({error: "Parâmetros inválidos."});
         }
 
-        const createdSchedule = await ScheduleModel.createSchedule(userId, schedule);
-        return res.status(201).json(createdSchedule);
+        await userService.addSchedule(userId, schedule);
+        res.status(204).send();
     } catch (error) {
-        return res.status(500).json({error: error.message});
+
+        res.status(500).json({error: error.message});
     }
 }
 

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "start": "nodemon",
-    "start:migrate": "prisma db push --accept-data-loss && npx prisma generate && npm run start"
+    "start": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +34,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "firebase-admin": "^12.7.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.0",
     "reflect-metadata": "^0.2.2",

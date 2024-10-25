@@ -1,6 +1,8 @@
 import {Request, Response} from "express";
-import {authentication, random} from "../../helper/helpers";
-import UserModel from "../../models/general/UserModel";
+import {authentication} from "../../helper/helpers";
+import UserService from "../../models/general/UserService";
+
+const userService = new UserService();
 
 const login = async (req: Request, res: Response) => {
     try {
@@ -10,36 +12,25 @@ const login = async (req: Request, res: Response) => {
         } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({
-                error: "Campos obrigatórios não preenchidos."
-            });
+            res.status(400).json({error: "Campos obrigatórios não preenchidos."});
         }
 
-        const user = await UserModel.getUserByEmail(email);
+        const user = await userService.getUserByEmail(email);
         if (!user) {
-            return res.status(404).json({
-                error: "Usuário não encontrado."
-            });
+            res.status(404).json({error: "Usuário não encontrado."});
         }
 
         const expectedHash = authentication(user.salt, password);
-        if (expectedHash !== user.hashedPassword) {
-            return res.status(400).json({
-                error: "Credenciais inválidas."
-            });
+        if (expectedHash !== user.password) {
+            res.status(400).json({error: "Credenciais inválidas."});
         }
 
-        const salt = random();
-        const updatedFields = {
-            sessionToken: authentication(salt, user.email),
-        }
-        const updatedUser = await UserModel.updateUser(user.id, updatedFields);
-
-        return res.status(200).json(updatedUser);
+        const updatedUser = await userService.createSessionToken(user.id, password);
+        res.status(200).json(updatedUser);
     } catch (error) {
-        return res.status(400).json({error: error.message});
+        res.status(400).json({error: error.message});
     }
-}
+};
 
 const signup = async (req: Request, res: Response) => {
     try {
@@ -49,27 +40,17 @@ const signup = async (req: Request, res: Response) => {
             password,
         } = req.body;
 
-        const existingUser = await UserModel.getUserByEmail(email);
+        const existingUser = await userService.getUserByEmail(email);
         if (existingUser) {
-            return res.status(400).json({
-                error: "Usuário já cadastrado."
-            });
+            res.status(400).json({error: "Usuário já cadastrado."});
         }
 
-        const salt = random();
-        const hashedPassword = authentication(salt, password);
-        const newUser = await UserModel.createUser(
-            username,
-            email,
-            hashedPassword,
-            salt,
-        );
-
-        return res.status(200).json(newUser);
+        const newUser = await userService.createUser(username, email, password);
+        res.status(200).json(newUser);
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
-}
+};
 
 export {
     login,

@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import MeetingModel from "../../models/nite-log/MeetingModel";
-import {createRandomMeetingCode} from "../../helper/helpers";
-import AttendanceListModel from "../../models/nite-log/AttendanceListModel";
+import MeetingService from "../../models/nite-log/MeetingService";
+
+const meetingService = new MeetingService();
 
 const createMeeting = async (req: Request, res: Response) => {
     try {
@@ -9,18 +9,15 @@ const createMeeting = async (req: Request, res: Response) => {
             date
         } = req.body;
 
-        const meeting = await MeetingModel.getMeetingByDate(date);
+        const meeting = await meetingService.getMeetingByDate(date);
         if (meeting) {
-            return res.status(409).json({
-                error: "Reunião já cadastrada.",
-                meeting: meeting
-            });
+            res.status(409).json({error: "Reunião já cadastrada.", meeting: meeting});
         }
 
-        const newMeeting = await MeetingModel.createMeeting(date);
-        return res.status(201).json(newMeeting);
+        const newMeeting = await meetingService.createMeeting(date);
+        res.status(201).json(newMeeting);
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
@@ -32,24 +29,23 @@ const addUserToAttendanceList = async (req: Request, res: Response) => {
             meetingCode
         } = req.body;
 
-        const meeting = await MeetingModel.getMeetingByDate(date);
+        const meeting = await meetingService.getMeetingByDate(date);
         if (!meeting) {
-            return res.status(404).json({error: "Reunião não encontrada"});
+            res.status(404).json({error: "Reunião não encontrada"});
         }
 
-        const attendance = await AttendanceListModel.getSingleAttendance(userId, meeting.id);
-        if (attendance) {
-            return res.status(409).json({error: "Usuário já cadastrado na lista de presença"});
+        if (meeting.attendanceList.find((a) => a.userId === userId)) {
+            res.status(409).json({error: "Usuário já cadastrado na lista de presença"});
         }
 
         if (meeting.meetingCode !== meetingCode) {
-            return res.status(403).json({error: "Código de reunião inválido"});
+            res.status(403).json({error: "Código de reunião inválido"});
         }
 
-        await AttendanceListModel.addUserToAttendanceList(userId, meeting.id);
-        return res.status(200).json({message: "Usuário adicionado à lista de presença"});
+        await meetingService.addUserToAttendanceList(meeting.id, userId);
+        res.status(200).json({message: "Usuário adicionado à lista de presença"});
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
@@ -60,86 +56,79 @@ const finishUserAttendance = async (req: Request, res: Response) => {
             date
         } = req.body;
 
-        const meeting = await MeetingModel.getMeetingByDate(date);
+        const meeting = await meetingService.getMeetingByDate(date);
         if (!meeting) {
-            return res.status(404).json({error: "Reunião não encontrada"});
+            res.status(404).json({error: "Reunião não encontrada"});
         }
 
-        await AttendanceListModel.finishAttendance(userId, meeting.id);
-        return res.status(200).json({message: "Presença finalizada"});
+        await meetingService.finishUserAttendance(userId, meeting.id);
+        res.status(200).json({message: "Presença finalizada"});
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
 const getMeetingById = async (req: Request, res: Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const {id} = req.params;
 
-        if (isNaN(id)) {
-            return res.status(400).json({error: "ID inválido."});
+        if (!id) {
+            res.status(400).json({error: "ID inválido."});
         }
 
-        const meeting = await MeetingModel.getMeetingById(id)
-        return res.status(200).json(meeting);
+        const meeting = await meetingService.getById(id)
+        res.status(200).json(meeting);
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
 const getMeetingWithUserAttendance = async (req: Request, res: Response) => {
     try {
-        const date = req.params.date;
+        const {date} = req.params;
 
         if (!date) {
-            return res.status(400).json({error: "Data não fornecida."});
+            res.status(400).json({error: "Data não fornecida."});
         }
 
-        const meeting = await MeetingModel.getMeetingWithUserAttendance(date)
-        return res.status(200).json(meeting);
+        const meeting = await meetingService.getMeetingByDate(date);
+        res.status(200).json(meeting);
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
 const updateMeeting = async (req: Request, res: Response) => {
     try {
-        const meetingId = parseInt(req.params.id);
-        const {
-            meetingFields
-        } = req.body;
+        const {id} = req.params;
+        const {meetingFields} = req.body;
 
-        await MeetingModel.updateMeeting(meetingId, meetingFields);
-        return res.status(200).json({message: "Reunião atualizada com sucesso"});
+        await meetingService.update(id, meetingFields);
+        res.status(200).json({message: "Reunião atualizada com sucesso"});
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
 const updateMeetingCode = async (req: Request, res: Response) => {
     try {
-        const date = req.params.date;
+        const {date}= req.params;
 
-        const meeting = await MeetingModel.getMeetingByDate(date);
+        const updatedMeeting = await meetingService.updateMeetingCode(date);
 
-        const updatedMeeting = {
-            meetingCode: createRandomMeetingCode()
-        }
-        await MeetingModel.updateMeeting(meeting.id, updatedMeeting);
-
-        return res.status(200).json({newMeetingCode: updatedMeeting.meetingCode});
+        res.status(200).json({newMeetingCode: updatedMeeting.meetingCode});
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
 const deleteMeeting = async (req: Request, res: Response) => {
     try {
-        const meetingId = parseInt(req.params.id);
-        await MeetingModel.deleteMeeting(meetingId);
-        return res.status(200).json({message: "Reunião deletada com sucesso"});
+        const {id} = req.params;
+        await meetingService.delete(id);
+        res.status(200).json({message: "Reunião deletada com sucesso"});
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message});
     }
 }
 
