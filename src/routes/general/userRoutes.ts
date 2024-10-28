@@ -16,6 +16,6 @@ export default (router: Router) => {
     router.delete("/users/:userId", deleteUser);
 
     router.post("/users/:userId/schedules", createSchedule);
-    router.put("/users/schedules/:scheduleId", updateSchedule);
-    router.delete("/users/schedules/:scheduleId", deleteSchedule);
+    router.put("/users/:userId/schedules/:scheduleId", updateSchedule);
+    router.delete("/users/:userId/schedules/:scheduleId", deleteSchedule);
 }

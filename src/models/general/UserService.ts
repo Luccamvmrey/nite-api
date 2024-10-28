@@ -1,6 +1,6 @@
 import CRUDService from "../CRUDService";
 import {Schedule, User} from "../types";
-import {authentication, random} from "../../helper/helpers";
+import {authentication, createRandomMeetingCode, random} from "../../helper/helpers";
 
 export default class UserService extends CRUDService<User> {
     constructor() {
@@ -28,9 +28,26 @@ export default class UserService extends CRUDService<User> {
         return this.update(id, {sessionToken});
     }
 
-    async addSchedule(id: string, schedule: Schedule) {
+    async addSchedule(id: string, schedule: Partial<Schedule>) {
         const user = await this.getById(id);
+        schedule.id = createRandomMeetingCode();
         user.schedules.push(schedule);
         return this.update(id, {schedules: user.schedules});
+    }
+
+    async updateSchedule(userId: string, scheduleId: string, schedule: Partial<Schedule>) {
+        const user = await this.getById(userId);
+        user.schedules.forEach((s, index) => {
+            if (s.id === scheduleId) {
+                user.schedules[index] = {...s, ...schedule};
+            }
+        })
+        return this.update(userId, {schedules: user.schedules});
+    }
+
+    async deleteSchedule(userId: string, scheduleId: string) {
+        const user = await this.getById(userId);
+        user.schedules = user.schedules.filter(s => s.id !== scheduleId);
+        return this.update(userId, {schedules: user.schedules});
     }
 }

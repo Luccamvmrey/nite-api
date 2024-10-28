@@ -6,13 +6,14 @@ export type User = {
     password: string;
     sessionToken: string;
     isOnAttendance: boolean;
-    schedules: Schedule[];
+    schedules: Partial<Schedule>[];
     role: UserRoles;
 };
 
 export type UserRoles = "admin" | "user";
 
 export type Schedule = {
+    id: string;
     dayOfWeek: number;
     startTime: string;
     endTime: string;
