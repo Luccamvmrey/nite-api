@@ -19,7 +19,8 @@ export default class UserService extends CRUDService<User> {
     }
 
     async getUserBySessionToken(sessionToken: string) {
-        return this.getByField("sessionToken", sessionToken);
+        const [user] = await this.getByField("sessionToken", sessionToken);
+        return user;
     }
 
     async createSessionToken(id: string, password: string) {
@@ -31,6 +32,9 @@ export default class UserService extends CRUDService<User> {
     async addSchedule(id: string, schedule: Partial<Schedule>) {
         const user = await this.getById(id);
         schedule.id = createRandomMeetingCode();
+        if (!user.schedules) {
+            user.schedules = [];
+        }
         user.schedules.push(schedule);
         return this.update(id, {schedules: user.schedules});
     }

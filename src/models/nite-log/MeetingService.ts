@@ -33,6 +33,9 @@ export default class MeetingService extends CRUDService<Meeting> {
         const startTime = formatTime();
         await this.userService.update(userId, {isOnAttendance: true});
         const meeting = await this.getById(meetingId);
+        if (!meeting.attendanceList) {
+            meeting.attendanceList = [];
+        }
         meeting.attendanceList.push({userId, startTime, endTime: null});
         return this.update(meetingId, {attendanceList: meeting.attendanceList});
     }
