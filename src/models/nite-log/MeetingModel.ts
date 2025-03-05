@@ -11,7 +11,8 @@ export default class MeetingModel {
         return Meeting.create({
             data: {
                 meetingCode: createRandomMeetingCode(),
-                date: formattedDate
+                date: formattedDate,
+                attendanceList: {}
             }
         })
     }
